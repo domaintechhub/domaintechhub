@@ -1,0 +1,369 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+  
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    background-color: #faf8f5;
+    color: #0f172a;
+  }
+
+  html.dark body {
+    background-color: #020617;
+    color: #f8fafc;
+  }
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1efe9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #090d16;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* ==========================================================================
+   Light Mode Theme Card & Surface Conversions
+   Ensures deep dark slate classes map to crisp warm cards in light mode
+   without breaking text color inheritance
+   ========================================================================== */
+
+/* Warm Canvas and Surface Cards */
+html:not(.dark) .bg-slate-950,
+html:not(.dark) .bg-slate-950\/95,
+html:not(.dark) .bg-slate-950\/90,
+html:not(.dark) .bg-slate-950\/85,
+html:not(.dark) .bg-slate-950\/80,
+html:not(.dark) .bg-slate-950\/70,
+html:not(.dark) .bg-slate-950\/60,
+html:not(.dark) .bg-slate-950\/50 {
+  background-color: #faf8f5 !important;
+}
+
+html:not(.dark) .bg-slate-900,
+html:not(.dark) .bg-slate-900\/95,
+html:not(.dark) .bg-slate-900\/90,
+html:not(.dark) .bg-slate-900\/80,
+html:not(.dark) .bg-slate-900\/70,
+html:not(.dark) .bg-slate-900\/60,
+html:not(.dark) .bg-slate-900\/50,
+html:not(.dark) .bg-slate-900\/40,
+html:not(.dark) .bg-slate-900\/30,
+html:not(.dark) .bg-slate-900\/20,
+html:not(.dark) .bg-stone-900,
+html:not(.dark) .bg-stone-900\/90 {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) .bg-slate-800,
+html:not(.dark) .bg-slate-800\/90,
+html:not(.dark) .bg-slate-800\/80,
+html:not(.dark) .bg-slate-800\/70,
+html:not(.dark) .bg-slate-800\/60,
+html:not(.dark) .bg-slate-800\/50,
+html:not(.dark) .bg-slate-800\/40,
+html:not(.dark) .bg-slate-800\/30 {
+  background-color: #f3efe6 !important;
+}
+
+/* Borders with warm stone undertone */
+html:not(.dark) .border-slate-900,
+html:not(.dark) .border-slate-900\/90,
+html:not(.dark) .border-slate-800,
+html:not(.dark) .border-slate-800\/90,
+html:not(.dark) .border-slate-800\/80,
+html:not(.dark) .border-slate-800\/70,
+html:not(.dark) .border-slate-800\/60,
+html:not(.dark) .border-slate-700,
+html:not(.dark) .border-slate-700\/80,
+html:not(.dark) .border-slate-700\/60,
+html:not(.dark) .border-slate-700\/50,
+html:not(.dark) .border-stone-800 {
+  border-color: #e7e2d8 !important;
+}
+
+/* Soft Tinted Badges in Light Mode */
+html:not(.dark) .bg-cyan-950,
+html:not(.dark) .bg-cyan-950\/90,
+html:not(.dark) .bg-cyan-950\/80,
+html:not(.dark) .bg-cyan-950\/70,
+html:not(.dark) .bg-cyan-950\/60,
+html:not(.dark) .bg-cyan-950\/50,
+html:not(.dark) .bg-cyan-950\/40 {
+  background-color: #ecfeff !important;
+}
+
+html:not(.dark) .border-cyan-800,
+html:not(.dark) .border-cyan-800\/80,
+html:not(.dark) .border-cyan-800\/60,
+html:not(.dark) .border-cyan-800\/50,
+html:not(.dark) .border-cyan-800\/40,
+html:not(.dark) .border-cyan-500\/30,
+html:not(.dark) .border-cyan-500\/40 {
+  border-color: #a5f3fc !important;
+}
+
+html:not(.dark) .bg-emerald-950,
+html:not(.dark) .bg-emerald-950\/90,
+html:not(.dark) .bg-emerald-950\/80,
+html:not(.dark) .bg-emerald-950\/70,
+html:not(.dark) .bg-emerald-950\/60,
+html:not(.dark) .bg-emerald-950\/50 {
+  background-color: #ecfdf5 !important;
+}
+
+html:not(.dark) .border-emerald-800,
+html:not(.dark) .border-emerald-800\/80,
+html:not(.dark) .border-emerald-800\/60,
+html:not(.dark) .border-emerald-800\/40 {
+  border-color: #a7f3d0 !important;
+}
+
+html:not(.dark) .bg-blue-950,
+html:not(.dark) .bg-blue-950\/80,
+html:not(.dark) .bg-blue-950\/60,
+html:not(.dark) .bg-blue-950\/40 {
+  background-color: #eff6ff !important;
+}
+
+html:not(.dark) .border-blue-800,
+html:not(.dark) .border-blue-800\/60,
+html:not(.dark) .border-blue-800\/40 {
+  border-color: #bfdbfe !important;
+}
+
+html:not(.dark) .bg-amber-950,
+html:not(.dark) .bg-amber-950\/80,
+html:not(.dark) .bg-amber-950\/60,
+html:not(.dark) .bg-amber-950\/50 {
+  background-color: #fffbeb !important;
+}
+
+html:not(.dark) .border-amber-800,
+html:not(.dark) .border-amber-800\/60,
+html:not(.dark) .border-amber-800\/40 {
+  border-color: #fde68a !important;
+}
+
+html:not(.dark) .bg-purple-950,
+html:not(.dark) .bg-purple-950\/80,
+html:not(.dark) .bg-purple-950\/60 {
+  background-color: #faf5ff !important;
+}
+
+html:not(.dark) .border-purple-800,
+html:not(.dark) .border-purple-800\/60,
+html:not(.dark) .border-purple-800\/40 {
+  border-color: #e9d5ff !important;
+}
+
+html:not(.dark) .bg-rose-950,
+html:not(.dark) .bg-rose-950\/60,
+html:not(.dark) .bg-rose-950\/50 {
+  background-color: #fff1f2 !important;
+}
+
+html:not(.dark) .border-rose-800,
+html:not(.dark) .border-rose-800\/60 {
+  border-color: #fecdd3 !important;
+}
+
+/* Form Controls & Inputs in Light Mode */
+html:not(.dark) input,
+html:not(.dark) textarea,
+html:not(.dark) select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #d6d0c4 !important;
+}
+
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Soft warm shadows in Light Mode */
+html:not(.dark) .shadow-2xl,
+html:not(.dark) .shadow-xl {
+  box-shadow: 0 10px 25px -5px rgba(28, 25, 23, 0.08), 0 8px 10px -6px rgba(28, 25, 23, 0.04) !important;
+}
+
+html:not(.dark) .shadow-lg {
+  box-shadow: 0 4px 6px -1px rgba(28, 25, 23, 0.07), 0 2px 4px -2px rgba(28, 25, 23, 0.04) !important;
+}
+
+/* ==========================================================================
+   Comprehensive Light Mode Typography & Color Inversion
+   Converts white/light-slate text into high-contrast dark text when in light mode,
+   EXCEPT inside intentional dark buttons/badges or gradients.
+   ========================================================================== */
+
+/* Main Text Colors in Light Mode */
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3,
+html:not(.dark) h4,
+html:not(.dark) h5,
+html:not(.dark) h6 {
+  color: #0f172a;
+}
+
+html:not(.dark) .text-white {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-slate-100 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-slate-200 {
+  color: #1e293b !important;
+}
+
+html:not(.dark) .text-slate-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) .text-slate-400 {
+  color: #475569 !important;
+}
+
+/* Ensure colored kickers have sharp contrast on light background */
+html:not(.dark) .text-cyan-400,
+html:not(.dark) .text-cyan-300 {
+  color: #0d9488 !important;
+}
+
+html:not(.dark) .text-emerald-400,
+html:not(.dark) .text-emerald-300 {
+  color: #059669 !important;
+}
+
+html:not(.dark) .text-blue-400,
+html:not(.dark) .text-blue-300 {
+  color: #2563eb !important;
+}
+
+html:not(.dark) .text-amber-400,
+html:not(.dark) .text-amber-300 {
+  color: #d97706 !important;
+}
+
+html:not(.dark) .text-purple-400,
+html:not(.dark) .text-purple-300 {
+  color: #7c3aed !important;
+}
+
+html:not(.dark) .text-rose-400,
+html:not(.dark) .text-rose-300 {
+  color: #e11d48 !important;
+}
+
+html:not(.dark) .text-stone-300,
+html:not(.dark) .text-stone-400 {
+  color: #334155 !important;
+}
+
+/* BUT preserve pure white text inside dark colored buttons, gradient buttons, and explicit colored containers */
+html:not(.dark) button.bg-emerald-600,
+html:not(.dark) button.bg-emerald-600 *,
+html:not(.dark) button.bg-emerald-500,
+html:not(.dark) button.bg-emerald-500 *,
+html:not(.dark) button.bg-teal-600,
+html:not(.dark) button.bg-teal-600 *,
+html:not(.dark) button.bg-blue-600,
+html:not(.dark) button.bg-blue-600 *,
+html:not(.dark) button.bg-cyan-500,
+html:not(.dark) button.bg-cyan-500 *,
+html:not(.dark) button.bg-gradient-to-r,
+html:not(.dark) button.bg-gradient-to-r *,
+html:not(.dark) a.bg-gradient-to-r,
+html:not(.dark) a.bg-gradient-to-r *,
+html:not(.dark) button.bg-gradient-to-br,
+html:not(.dark) button.bg-gradient-to-br *,
+html:not(.dark) a.bg-gradient-to-br,
+html:not(.dark) a.bg-gradient-to-br *,
+html:not(.dark) .bg-emerald-600,
+html:not(.dark) .bg-emerald-600 *,
+html:not(.dark) .bg-teal-600,
+html:not(.dark) .bg-teal-600 *,
+html:not(.dark) .bg-blue-600,
+html:not(.dark) .bg-blue-600 *,
+html:not(.dark) .bg-amber-600,
+html:not(.dark) .bg-amber-600 *,
+html:not(.dark) .bg-purple-600,
+html:not(.dark) .bg-purple-600 *,
+html:not(.dark) [class*="bg-emerald-600"] *,
+html:not(.dark) [class*="bg-teal-600"] *,
+html:not(.dark) [class*="bg-blue-600"] * {
+  color: #ffffff !important;
+}
+
+/* Card dark gradients in light mode */
+html:not(.dark) .from-slate-900,
+html:not(.dark) .from-slate-900\/80,
+html:not(.dark) .from-slate-900\/90,
+html:not(.dark) .from-stone-900,
+html:not(.dark) .from-stone-900\/90 {
+  --tw-gradient-from: #ffffff !important;
+}
+
+html:not(.dark) .to-slate-950,
+html:not(.dark) .to-slate-900 {
+  --tw-gradient-to: #faf8f5 !important;
+}
+
+/* Explicit Dark Mode Overrides (when html.dark is active) */
+html.dark .text-white {
+  color: #ffffff !important;
+}
+html.dark .text-slate-100 {
+  color: #f1f5f9 !important;
+}
+html.dark .text-slate-200 {
+  color: #e2e8f0 !important;
+}
+html.dark .text-slate-300 {
+  color: #cbd5e1 !important;
+}
+html.dark .text-slate-400 {
+  color: #94a3b8 !important;
+}
+html.dark .text-cyan-400 {
+  color: #22d3ee !important;
+}
+html.dark .text-cyan-300 {
+  color: #67e8f9 !important;
+}
+
