@@ -12,7 +12,7 @@ import { useTheme } from '../context/ThemeContext';
 import { AGENCY_INFO } from '../data/portfolioData';
 
 interface NavbarProps {
-  onNavigate: (sectionId: string) => void;
+  onNavigate: (sectionId: string, subParam?: string) => void;
   activeSection: string;
   onOpenSearch?: () => void;
 }
@@ -89,8 +89,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
     };
   }, [onOpenSearch]);
 
-  const handleNavClick = (id: string) => {
-    onNavigate(id);
+  const handleNavClick = (id: string, subParam?: string) => {
+    onNavigate(id, subParam);
     setServicesDropdownOpen(false);
     setToolsDropdownOpen(false);
     setPreferencesOpen(false);
@@ -197,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
 
                     <div className="grid grid-cols-2 gap-1.5">
                       <button
-                        onClick={() => handleNavClick('services')}
+                        onClick={() => handleNavClick('services', 'web-development')}
                         className="text-left p-2.5 rounded-2xl hover:bg-stone-50 dark:hover:bg-slate-900 transition-colors group flex items-start gap-2.5"
                       >
                         <div className="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 mt-0.5">
@@ -205,16 +205,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                         </div>
                         <div>
                           <div className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-300 transition-colors">
-                            Web & Mobile Dev
+                            Web Development
                           </div>
                           <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">
-                            React, Next.js, cross-platform apps
+                            React, Next.js & enterprise sites
                           </div>
                         </div>
                       </button>
 
                       <button
-                        onClick={() => handleNavClick('services')}
+                        onClick={() => handleNavClick('services', 'ecommerce-development')}
                         className="text-left p-2.5 rounded-2xl hover:bg-stone-50 dark:hover:bg-slate-900 transition-colors group flex items-start gap-2.5"
                       >
                         <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
@@ -225,13 +225,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                             E-Commerce & M-Pesa
                           </div>
                           <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">
-                            Daraja STK Push & Shopify stores
+                            Daraja STK Push & online stores
                           </div>
                         </div>
                       </button>
 
                       <button
-                        onClick={() => handleNavClick('services')}
+                        onClick={() => handleNavClick('services', 'seo-services')}
                         className="text-left p-2.5 rounded-2xl hover:bg-stone-50 dark:hover:bg-slate-900 transition-colors group flex items-start gap-2.5"
                       >
                         <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
@@ -248,7 +248,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                       </button>
 
                       <button
-                        onClick={() => handleNavClick('services')}
+                        onClick={() => handleNavClick('services', 'custom-crm-development')}
                         className="text-left p-2.5 rounded-2xl hover:bg-stone-50 dark:hover:bg-slate-900 transition-colors group flex items-start gap-2.5"
                       >
                         <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-blue-950/60 border border-purple-200 dark:border-blue-800 text-purple-600 dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
@@ -694,21 +694,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeSection, onOpe
                 {mobileServicesOpen && (
                   <div className="px-3 pb-3 space-y-1 bg-white dark:bg-slate-950/50 pt-1 text-xs">
                     <button
-                      onClick={() => handleNavClick('services')}
+                      onClick={() => handleNavClick('services', 'web-development')}
                       className="w-full text-left py-2 px-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800/60 flex items-center justify-between"
                     >
                       <span>Web & Mobile Development</span>
                       <ArrowRight className="w-3 h-3 text-teal-600" />
                     </button>
                     <button
-                      onClick={() => handleNavClick('services')}
+                      onClick={() => handleNavClick('services', 'ecommerce-development')}
                       className="w-full text-left py-2 px-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800/60 flex items-center justify-between"
                     >
                       <span>E-Commerce & M-Pesa Integrations</span>
                       <ArrowRight className="w-3 h-3 text-emerald-600" />
                     </button>
                     <button
-                      onClick={() => handleNavClick('services')}
+                      onClick={() => handleNavClick('services', 'seo-services')}
                       className="w-full text-left py-2 px-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800/60 flex items-center justify-between"
                     >
                       <span>SEO & Performance Optimization</span>

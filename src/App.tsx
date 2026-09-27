@@ -23,10 +23,12 @@ import { InsightsSection } from './components/InsightsSection';
 import { FaqSection } from './components/FaqSection';
 import { BookingSection } from './components/BookingSection';
 import { ToolsPage, ToolTab } from './components/ToolsPage';
+import { ServiceDetailPage } from './components/ServiceDetailPage';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
 import { Footer } from './components/Footer';
 import { QuickContactFloating } from './components/QuickContactFloating';
 import { applyPageSeo } from './utils/seo';
+import { SERVICES_LIST } from './data/servicesData';
 import { 
   ArrowRight, Sparkles, ShieldCheck, Zap, 
   CheckCircle, MessageSquare, PhoneCall, Code, Layers 
@@ -35,7 +37,7 @@ import { AGENCY_INFO } from './data/portfolioData';
 
 export type PageRoute = 'home' | 'services' | 'portfolio' | 'tools' | 'insights' | 'portal' | 'faq' | 'contact';
 
-function parseHashRoute(): { page: PageRoute; subTab?: ToolTab } {
+function parseHashRoute(): { page: PageRoute; subTab?: string } {
   if (typeof window === 'undefined') return { page: 'home' };
   const rawHash = window.location.hash.replace(/^#\/?/, '').toLowerCase().trim();
   
@@ -43,14 +45,16 @@ function parseHashRoute(): { page: PageRoute; subTab?: ToolTab } {
     return { page: 'home' };
   }
   if (rawHash.startsWith('service') || rawHash === 'tech-stack') {
-    return { page: 'services' };
+    const parts = rawHash.split('/');
+    const serviceSlug = parts[1] || undefined;
+    return { page: 'services', subTab: serviceSlug };
   }
   if (rawHash.startsWith('portfolio') || rawHash.startsWith('case-stud')) {
     return { page: 'portfolio' };
   }
   if (rawHash.startsWith('tools')) {
     const parts = rawHash.split('/');
-    const subTab = (parts[1] as ToolTab) || 'calculator';
+    const subTab = parts[1] || 'calculator';
     return { page: 'tools', subTab };
   }
   if (rawHash === 'calculator') {
@@ -80,6 +84,7 @@ function parseHashRoute(): { page: PageRoute; subTab?: ToolTab } {
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageRoute>('home');
   const [activeToolTab, setActiveToolTab] = useState<ToolTab>('calculator');
+  const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [calculatorServiceId, setCalculatorServiceId] = useState<string>('web-development');
   const [prefilledService, setPrefilledService] = useState<string>('');
@@ -90,8 +95,12 @@ export default function App() {
     const handleHashChange = () => {
       const { page, subTab } = parseHashRoute();
       setCurrentPage(page);
-      if (subTab) {
-        setActiveToolTab(subTab);
+      if (page === 'tools') {
+        if (subTab) setActiveToolTab(subTab as ToolTab);
+      } else if (page === 'services') {
+        setActiveServiceId(subTab || null);
+      } else {
+        setActiveServiceId(null);
       }
       window.scrollTo({ top: 0, behavior: 'instant' });
     };
@@ -103,49 +112,60 @@ export default function App() {
 
   // Dynamically update document title, meta descriptions, and Schema.org JSON-LD for SEO
   useEffect(() => {
-    applyPageSeo(currentPage, activeToolTab);
-  }, [currentPage, activeToolTab]);
+    applyPageSeo(currentPage, currentPage === 'services' ? (activeServiceId || undefined) : activeToolTab);
+  }, [currentPage, activeToolTab, activeServiceId]);
 
-  const navigateTo = (target: string, subTab?: string) => {
+  const navigateTo = (target: string, subParam?: string) => {
     let targetPage: PageRoute = 'home';
-    let targetTab: ToolTab | undefined = subTab as ToolTab | undefined;
+    let targetSub: string | undefined = subParam;
 
     if (target === 'hero' || target === 'home') {
       targetPage = 'home';
+      targetSub = undefined;
     } else if (target === 'services' || target === 'tech-stack') {
       targetPage = 'services';
     } else if (target === 'portfolio') {
       targetPage = 'portfolio';
+      targetSub = undefined;
     } else if (target === 'tools') {
       targetPage = 'tools';
+      if (!targetSub) targetSub = activeToolTab;
     } else if (target === 'calculator') {
       targetPage = 'tools';
-      targetTab = 'calculator';
+      targetSub = 'calculator';
     } else if (target === 'audit') {
       targetPage = 'tools';
-      targetTab = 'audit';
+      targetSub = 'audit';
     } else if (target === 'domains') {
       targetPage = 'tools';
-      targetTab = 'domains';
+      targetSub = 'domains';
     } else if (target === 'insights') {
       targetPage = 'insights';
+      targetSub = undefined;
     } else if (target === 'client-portal' || target === 'portal') {
       targetPage = 'portal';
+      targetSub = undefined;
     } else if (target === 'faq') {
       targetPage = 'faq';
+      targetSub = undefined;
     } else if (target === 'contact' || target === 'booking') {
       targetPage = 'contact';
+      targetSub = undefined;
     }
 
     setCurrentPage(targetPage);
-    if (targetTab) {
-      setActiveToolTab(targetTab);
+    if (targetPage === 'tools' && targetSub) {
+      setActiveToolTab(targetSub as ToolTab);
+    } else if (targetPage === 'services') {
+      setActiveServiceId(targetSub || null);
+    } else {
+      setActiveServiceId(null);
     }
 
     // Update URL hash
     let newHash = '';
     if (targetPage !== 'home') {
-      newHash = targetTab ? `#/${targetPage}/${targetTab}` : `#/${targetPage}`;
+      newHash = targetSub ? `#/${targetPage}/${targetSub}` : `#/${targetPage}`;
     }
     
     if (window.location.hash !== newHash) {
@@ -279,53 +299,73 @@ export default function App() {
             {/* 2. DEDICATED PAGE: SERVICES & ENGINEERING SOLUTIONS */}
             {currentPage === 'services' && (
               <div className="animate-in fade-in duration-200">
-                <PageHeader
-                  badge="Engineering Capabilities & Turnkey Solutions"
-                  badgeIcon={<Layers className="w-3.5 h-3.5 text-teal-500" />}
-                  title="Enterprise Web, Mobile & E-Commerce Engineering"
-                  description="We architect bespoke digital platforms designed for regional and global scale: headless e-commerce, Safaricom Daraja 3.0 M-Pesa STK Push, high-conversion SEO systems, and mission-critical CRMs."
-                  currentBreadcrumb="Services & Solutions"
-                  onNavigateHome={() => navigateTo('home')}
-                  actionButton={{
-                    label: "Calculate Project Scope",
-                    onClick: () => navigateTo('tools')
-                  }}
-                />
-
-                <div className="py-6">
-                  <ServicesExplorer 
+                {activeServiceId && SERVICES_LIST.some(s => s.id === activeServiceId) ? (
+                  <ServiceDetailPage
+                    service={SERVICES_LIST.find(s => s.id === activeServiceId)!}
+                    onSelectService={(id) => navigateTo('services', id)}
+                    onBackToCatalog={() => navigateTo('services')}
+                    onBookService={(name, details) => {
+                      setPrefilledService(name);
+                      if (details) setPrefilledNotes(details);
+                      navigateTo('contact');
+                    }}
                     onSelectForQuote={handleSelectForQuote}
-                    onBookService={handleBookService}
+                    onNavigateToCaseStudy={(csId) => {
+                      navigateTo('portfolio');
+                    }}
                   />
+                ) : (
+                  <>
+                    <PageHeader
+                      badge="Engineering Capabilities & Turnkey Solutions"
+                      badgeIcon={<Layers className="w-3.5 h-3.5 text-teal-500" />}
+                      title="Enterprise Web, Mobile & E-Commerce Engineering"
+                      description="We architect bespoke digital platforms designed for regional and global scale: headless e-commerce, Safaricom Daraja 3.0 M-Pesa STK Push, high-conversion SEO systems, and mission-critical CRMs."
+                      currentBreadcrumb="Services & Solutions"
+                      onNavigateHome={() => navigateTo('home')}
+                      actionButton={{
+                        label: "Calculate Project Scope",
+                        onClick: () => navigateTo('tools')
+                      }}
+                    />
 
-                  <TechStackSection 
-                    onSelectTechForProject={handleSelectTechForProject}
-                  />
-                </div>
+                    <div className="py-6">
+                      <ServicesExplorer 
+                        onSelectForQuote={handleSelectForQuote}
+                        onBookService={handleBookService}
+                        onOpenServicePage={(id) => navigateTo('services', id)}
+                      />
 
-                {/* Consultation callout banner */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-                  <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-                    <div className="space-y-2 text-center md:text-left">
-                      <div className="text-xs font-mono text-teal-600 dark:text-teal-400 uppercase tracking-wider font-semibold">
-                        Custom Enterprise Requirements
-                      </div>
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-                        Need a specialized architecture not listed here?
-                      </h3>
-                      <p className="text-sm text-slate-600 dark:text-stone-300 max-w-xl leading-relaxed">
-                        Our senior engineers in Nairobi build custom backend APIs, data pipelines, and fintech integrations according to your exact product requirements.
-                      </p>
+                      <TechStackSection 
+                        onSelectTechForProject={handleSelectTechForProject}
+                      />
                     </div>
 
-                    <button
-                      onClick={() => navigateTo('contact')}
-                      className="px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wide shadow-lg shadow-emerald-600/25 transition-all whitespace-nowrap"
-                    >
-                      Book Technical Discovery Call
-                    </button>
-                  </div>
-                </div>
+                    {/* Consultation callout banner */}
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+                      <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+                        <div className="space-y-2 text-center md:text-left">
+                          <div className="text-xs font-mono text-teal-600 dark:text-teal-400 uppercase tracking-wider font-semibold">
+                            Custom Enterprise Requirements
+                          </div>
+                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+                            Need a specialized architecture not listed here?
+                          </h3>
+                          <p className="text-sm text-slate-600 dark:text-stone-300 max-w-xl leading-relaxed">
+                            Our senior engineers in Nairobi build custom backend APIs, data pipelines, and fintech integrations according to your exact product requirements.
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => navigateTo('contact')}
+                          className="px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wide shadow-lg shadow-emerald-600/25 transition-all whitespace-nowrap"
+                        >
+                          Book Technical Discovery Call
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
